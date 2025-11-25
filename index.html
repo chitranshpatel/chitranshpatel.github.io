@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Scientist Portfolio</title>
+    <meta name="description" content="Portfolio of a Graduate Data Science Student">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* Custom Fonts & Base Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #bc13fe;
+            --bg-dark: #0f172a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .mono-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-blue);
+        }
+
+        /* Glassmorphism Classes */
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 243, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0); }
+        }
+
+        .btn-glow {
+            animation: pulse-glow 2s infinite;
+        }
+
+        /* Scroll Reveal Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Skill Bar Animation */
+        .skill-progress {
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+
+        /* Cursor */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--neon-blue);
+        }
+        .cursor-outline {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--neon-blue);
+        }
+        
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-purple));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-500 selection:text-white">
+
+    <!-- 3D Background Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass border-b border-slate-700/50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 cursor-pointer">
+                    <span class="text-2xl font-bold mono-font text-white">&lt;Data<span class="text-cyan-400">Scientist</span>/&gt;</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+                        <a href="#about" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">About</a>
+                        <a href="#skills" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Skills</a>
+                        <a href="#projects" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Projects</a>
+                        <a href="#contact" class="px-4 py-2 rounded border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition-all text-sm font-bold">Resume</a>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-slate-900 border-b border-slate-700" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-800 text-white">Home</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-800 text-gray-300">About</a>
+                <a href="#skills" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-800 text-gray-300">Skills</a>
+                <a href="#projects" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-800 text-gray-300">Projects</a>
+                <a href="#" class="block px-3 py-2 mt-4 text-center rounded border border-cyan-400 text-cyan-400 font-bold">Download Resume</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative px-4 pt-16">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="order-2 lg:order-1 reveal active">
+                <p class="text-cyan-400 font-bold tracking-wider mb-2 mono-font">HELLO, WORLD.</p>
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 leading-tight">
+                    I'm <span class="text-gradient">Alex Chen</span>
+                </h1>
+                <h2 class="text-2xl md:text-3xl text-slate-400 mb-6 mono-font">
+                    <span id="typewriter"></span><span class="animate-pulse">|</span>
+                </h2>
+                <p class="text-slate-300 text-lg mb-8 max-w-lg leading-relaxed">
+                    A Graduate Data Science Student transforming complex datasets into actionable insights through Machine Learning and Statistical Analysis.
+                </p>
+                
+                <div class="flex flex-wrap gap-4">
+                    <a href="#projects" class="px-8 py-3 bg-cyan-500 text-black font-bold rounded hover:bg-cyan-400 transition-all btn-glow">
+                        View Work
+                    </a>
+                    <a href="#contact" class="px-8 py-3 glass text-white font-bold rounded hover:bg-white/10 transition-all">
+                        Contact Me
+                    </a>
+                </div>
+
+                <div class="mt-12 flex space-x-6">
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 text-2xl transition-transform hover:-translate-y-1"><i class="fab fa-github"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 text-2xl transition-transform hover:-translate-y-1"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 text-2xl transition-transform hover:-translate-y-1"><i class="fab fa-kaggle"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 text-2xl transition-transform hover:-translate-y-1"><i class="fab fa-medium"></i></a>
+                </div>
+            </div>
+            
+            <!-- Abstract Data Vis Decoration -->
+            <div class="order-1 lg:order-2 flex justify-center reveal delay-200">
+                <div class="relative w-64 h-64 md:w-96 md:h-96">
+                   <!-- This space is visually filled by the Three.js background particles converging here -->
+                   <div class="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 rounded-full filter blur-3xl animate-pulse"></div>
+                   <div class="absolute inset-0 border border-slate-700/50 rounded-full flex items-center justify-center glass floating">
+                        <div class="text-center">
+                            <i class="fas fa-brain text-6xl text-cyan-400 mb-2"></i>
+                            <div class="mono-font text-sm text-slate-300">Neural Networks</div>
+                        </div>
+                   </div>
+                   <!-- Floating badges -->
+                   <div class="absolute top-0 right-0 glass px-4 py-2 rounded-lg text-sm font-bold text-purple-400 floating" style="animation-delay: 1s;">
+                       <i class="fas fa-database mr-2"></i>Big Data
+                   </div>
+                   <div class="absolute bottom-10 left-0 glass px-4 py-2 rounded-lg text-sm font-bold text-green-400 floating" style="animation-delay: 2s;">
+                       <i class="fas fa-chart-line mr-2"></i>Analytics
+                   </div>
+                </div>
+            </div>
+        </div>
+        
+        <a href="#about" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-cyan-400 animate-bounce">
+            <i class="fas fa-chevron-down text-2xl"></i>
+        </a>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col items-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4"><span class="text-cyan-400">01.</span> About Me</h2>
+                <div class="w-20 h-1 bg-cyan-500 rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="glass-card p-8 rounded-2xl reveal">
+                    <p class="text-slate-300 leading-relaxed mb-6">
+                        I am currently pursuing my <strong class="text-white">Master's in Data Science</strong>. My journey began with a fascination for mathematics, which evolved into a passion for uncovering hidden patterns in large datasets.
+                    </p>
+                    <p class="text-slate-300 leading-relaxed mb-6">
+                        I specialize in <strong class="text-cyan-400">Machine Learning</strong> and <strong class="text-cyan-400">Predictive Modeling</strong>. I enjoy translating complex data into clear, compelling stories that drive strategic decision-making.
+                    </p>
+                    <div class="flex items-center space-x-4 mt-8">
+                        <div class="text-center">
+                            <span class="block text-3xl font-bold text-white">2+</span>
+                            <span class="text-xs text-slate-400 uppercase tracking-wide">Years Exp</span>
+                        </div>
+                        <div class="h-10 w-px bg-slate-600"></div>
+                        <div class="text-center">
+                            <span class="block text-3xl font-bold text-white">15+</span>
+                            <span class="text-xs text-slate-400 uppercase tracking-wide">Projects</span>
+                        </div>
+                        <div class="h-10 w-px bg-slate-600"></div>
+                        <div class="text-center">
+                            <span class="block text-3xl font-bold text-white">3.9</span>
+                            <span class="text-xs text-slate-400 uppercase tracking-wide">GPA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal delay-200">
+                    <h3 class="text-xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-graduation-cap text-cyan-400 mr-3"></i> Education
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="border-l-2 border-cyan-500 pl-6 relative">
+                            <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-cyan-500"></div>
+                            <h4 class="text-lg font-bold text-white">M.S. in Data Science</h4>
+                            <p class="text-cyan-400 text-sm mb-1">Stanford University | 2023 - Present</p>
+                            <p class="text-slate-400 text-sm">Focus: Deep Learning, Natural Language Processing, Big Data Systems.</p>
+                        </div>
+                        <div class="border-l-2 border-slate-700 pl-6 relative">
+                            <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-700"></div>
+                            <h4 class="text-lg font-bold text-white">B.S. in Computer Science</h4>
+                            <p class="text-cyan-400 text-sm mb-1">University of Washington | 2019 - 2023</p>
+                            <p class="text-slate-400 text-sm">Minor in Statistics. graduated Summa Cum Laude.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col items-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4"><span class="text-cyan-400">02.</span> Technical Arsenal</h2>
+                <div class="w-20 h-1 bg-cyan-500 rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <!-- Skill Bars -->
+                <div class="space-y-6 reveal">
+                    <h3 class="mono-font text-xl mb-6 text-purple-400">&lt;Languages & Frameworks/&gt;</h3>
+                    
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-base font-medium text-white">Python (Pandas, NumPy)</span>
+                            <span class="text-sm font-medium text-cyan-400">95%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5">
+                            <div class="bg-cyan-500 h-2.5 rounded-full skill-progress" data-width="95%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-base font-medium text-white">Machine Learning (Scikit-Learn, XGBoost)</span>
+                            <span class="text-sm font-medium text-cyan-400">90%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5">
+                            <div class="bg-purple-500 h-2.5 rounded-full skill-progress" data-width="90%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-base font-medium text-white">Deep Learning (PyTorch, TensorFlow)</span>
+                            <span class="text-sm font-medium text-cyan-400">85%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5">
+                            <div class="bg-blue-500 h-2.5 rounded-full skill-progress" data-width="85%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-base font-medium text-white">SQL & Databases</span>
+                            <span class="text-sm font-medium text-cyan-400">80%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5">
+                            <div class="bg-green-500 h-2.5 rounded-full skill-progress" data-width="80%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools Grid -->
+                <div class="reveal delay-200">
+                    <h3 class="mono-font text-xl mb-6 text-purple-400">&lt;Tools & Platforms/&gt;</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="glass p-4 rounded-xl flex flex-col items-center justify-center hover:bg-slate-800 transition-colors">
+                            <i class="fab fa-aws text-3xl text-orange-400 mb-2"></i>
+                            <span class="text-xs text-slate-300">AWS</span>
+                        </div>
+                        <div class="glass p-4 rounded-xl flex flex-col items-center justify-center hover:bg-slate-800 transition-colors">
+                            <i class="fab fa-docker text-3xl text-blue-400 mb-2"></i>
+                            <span class="text-xs text-slate-300">Docker</span>
+                        </div>
+                        <div class="glass p-4 rounded-xl flex flex-col items-center justify-center hover:bg-slate-800 transition-colors">
+                            <i class="fab fa-git-alt text-3xl text-red-500 mb-2"></i>
+                            <span class="text-xs text-slate-300">Git</span>
+                        </div>
+                        <div class="glass p-4 rounded-xl flex flex-col items-center justify-center hover:bg-slate-800 transition-colors">
+                            <i class="fas fa-chart-bar text-3xl text-yellow-400 mb-2"></i>
+                            <span class="text-xs text-slate-300">Tableau</span>
+                        </div>
+                        <div class="glass p-4 rounded-xl flex flex-col items-center justify-center hover:bg-slate-800 transition-colors">
+                            <i class="fas fa-code-branch text-3xl text-purple-400 mb-2"></i>
+                            <span class="text-xs text-slate-300">MLFlow</span>
+                        </div>
+                        <div class="glass p-4 rounded-xl flex flex-col items-center justify-center hover:bg-slate-800 transition-colors">
+                            <i class="fas fa-terminal text-3xl text-green-400 mb-2"></i>
+                            <span class="text-xs text-slate-300">Bash</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col items-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4"><span class="text-cyan-400">03.</span> Featured Projects</h2>
+                <div class="w-20 h-1 bg-cyan-500 rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Project Card 1 -->
+                <div class="glass-card rounded-xl overflow-hidden reveal hover:scale-105 transition-transform duration-300 flex flex-col h-full">
+                    <div class="h-48 bg-slate-800 relative group overflow-hidden">
+                        <!-- Mockup visuals -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent z-10"></div>
+                        <div class="w-full h-full flex items-center justify-center bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9IkQwIDQwTDAgMEg0MFY0MHptMCAwTDAgMEg0MFY0MHoiIGZpbGw9IiM0NzQ1NTUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9nPjwvc3ZnPg==')]">
+                            <i class="fas fa-users text-6xl text-cyan-500 opacity-50"></i>
+                        </div>
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <h3 class="text-xl font-bold text-white">Customer Churn Predictor</h3>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <p class="text-slate-300 text-sm mb-4 flex-grow">
+                            Developed an XGBoost classifier to predict customer attrition for a telecom dataset. Achieved 92% accuracy and identified key churn drivers.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-slate-700 rounded text-cyan-300">Python</span>
+                            <span class="text-xs px-2 py-1 bg-slate-700 rounded text-cyan-300">XGBoost</span>
+                            <span class="text-xs px-2 py-1 bg-slate-700 rounded text-cyan-300">Flask</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-4 border-t border-slate-700">
+                            <a href="#" class="text-white hover:text-cyan-400"><i class="fab fa-github"></i> Code</a>
+                            <a href="#" class="text-white hover:text-cyan-400"><i class="fas fa-external-link-alt"></i> Demo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="glass-card rounded-xl overflow-hidden reveal hover:scale-105 transition-transform duration-300 flex flex-col h-full transition-delay-100">
+                    <div class="h-48 bg-slate-800 relative group overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent z-10"></div>
+                        <div class="w-full h-full flex items-center justify-center bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9IkQwIDQwTDAgMEg0MFY0MHptMCAwTDAgMEg0MFY0MHoiIGZpbGw9IiM0NzQ1NTUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9nPjwvc3ZnPg==')]">
+                            <i class="fas fa-eye text-6xl text-purple-500 opacity-50"></i>
+                        </div>
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <h3 class="text-xl font-bold text-white">Computer Vision Traffic</h3>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <p class="text-slate-300 text-sm mb-4 flex-grow">
+                            Real-time vehicle counting and classification system using YOLOv5 and OpenCV. Optimized for edge devices with 30 FPS inference.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-slate-700 rounded text-purple-300">PyTorch</span>
+                            <span class="text-xs px-2 py-1 bg-slate-700 rounded text-purple-300">OpenCV</span>
+                            <span class="text-xs px-2 py-1 bg-slate-700 rounded text-purple-300">YOLO</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-4 border-t border-slate-700">
+                            <a href="#" class="text-white hover:text-cyan-400"><i class="fab fa-github"></i> Code</a>
+                            <a href="#" class="text-white hover:text-cyan-400"><i class="fas fa-file-pdf"></i> Paper</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="glass-card rounded-xl overflow-hidden reveal hover:scale-105 transition-transform duration-300 flex flex-col h-full transition-delay-200">
+                    <div class="h-48 bg-slate-800 relative group overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent z-10"></div>
+                        <div class="w-full h-full flex items-center justify-center bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9IkQwIDQwTDAgMEg0MFY0MHptMCAwTDAgMEg0MFY0MHoiIGZpbGw9IiM0NzQ1NTUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9nPjwvc3ZnPg==')]">
+                            <i class="fas fa-comments text-6xl text-green-500 opacity-50"></i>
+                        </div>
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <h3 class="text-xl font-bold text-white">Sentiment Analysis NLP</h3>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <p class="text-slate-300 text-sm mb-4 flex-grow">
+                            Scraped 50k Twitter posts to analyze brand sentiment during product launches. Utilized BERT transformers for classification.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-slate-700 rounded text-green-300">HuggingFace</span>
+                            <span class="text-xs px-2 py-1 bg-slate-700 rounded text-green-300">TensorFlow</span>
+                            <span class="text-xs px-2 py-1 bg-slate-700 rounded text-green-300">NLTK</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-4 border-t border-slate-700">
+                            <a href="#" class="text-white hover:text-cyan-400"><i class="fab fa-github"></i> Code</a>
+                            <a href="#" class="text-white hover:text-cyan-400"><i class="fas fa-chart-pie"></i> Visuals</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block px-8 py-3 border border-cyan-400 text-cyan-400 font-bold rounded hover:bg-cyan-400 hover:text-black transition-all">
+                    View Full Archive
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gradient-to-t from-black to-slate-900">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal">
+                <p class="text-cyan-400 font-bold tracking-wider mb-4 mono-font">04. WHAT'S NEXT?</p>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Get In Touch</h2>
+                <p class="text-slate-300 text-lg mb-8 leading-relaxed max-w-2xl mx-auto">
+                    I am currently looking for full-time opportunities in Data Science and Machine Learning. Whether you have a question about my research or just want to say hi, my inbox is open!
+                </p>
+                
+                <div class="glass p-8 rounded-xl max-w-lg mx-auto mb-8 text-left">
+                     <form onsubmit="event.preventDefault(); alert('Thanks for the message! (This is a demo)');" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-1">Name</label>
+                            <input type="text" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-1">Email</label>
+                            <input type="email" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-1">Message</label>
+                            <textarea rows="4" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 transition"></textarea>
+                        </div>
+                        <button class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded transition-colors">
+                            Send Message
+                        </button>
+                     </form>
+                </div>
+
+                <a href="mailto:hello@example.com" class="text-slate-400 hover:text-cyan-400 transition-colors">hello@alexchen-data.com</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-6 bg-black text-center border-t border-slate-800">
+        <p class="text-slate-500 text-sm mono-font">Designed & Built by Alex Chen</p>
+        <div class="mt-2 text-xs text-slate-600">
+            <i class="fab fa-html5 mx-1"></i>
+            <i class="fab fa-js mx-1"></i>
+            <i class="fab fa-css3-alt mx-1"></i>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // 1. Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // 2. Typewriter Effect
+        const textElement = document.getElementById('typewriter');
+        const phrases = ['Data Scientist', 'ML Engineer', 'Researcher', 'Python Developer'];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
+
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 50;
+            } else {
+                textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 100;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                typeSpeed = 2000; // Pause at end
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+
+        document.addEventListener('DOMContentLoaded', type);
+
+        // 3. Scroll Reveal & Skill Bar Animation
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Trigger skill bars if inside the skill section
+                    if (entry.target.querySelector('.skill-progress')) {
+                        const bars = entry.target.querySelectorAll('.skill-progress');
+                        bars.forEach(bar => {
+                            bar.style.width = bar.getAttribute('data-width');
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 4. Three.js Background Animation (Particles Network)
+        const initThreeJS = () => {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            // Fog to fade particles into background
+            scene.fog = new THREE.FogExp2(0x0f172a, 0.002);
+
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Create Particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 700;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount * 3; i++) {
+                // Spread particles
+                posArray[i] = (Math.random() - 0.5) * 100;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            // Material for dots
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.2,
+                color: 0x00f3ff,
+                transparent: true,
+                opacity: 0.8,
+            });
+
+            // Mesh
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            // Add Lines connecting particles (Visualizing Neural Net/Data connections)
+            // We use a separate geometry for lines that updates sparsely to save performance
+            
+            // Mouse Interaction
+            let mouseX = 0;
+            let mouseY = 0;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            });
+
+            // Animation Loop
+            const clock = new THREE.Clock();
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                
+                const elapsedTime = clock.getElapsedTime();
+
+                // Rotate entire system slowly
+                particlesMesh.rotation.y = elapsedTime * 0.05;
+                particlesMesh.rotation.x = elapsedTime * 0.02;
+
+                // React to mouse
+                particlesMesh.rotation.y += mouseX * 0.00005;
+                particlesMesh.rotation.x += mouseY * 0.00005;
+
+                // Wavy movement
+                // We're accessing the geometry directly to make waves
+                /* Note: Modifying buffer geometry every frame is CPU heavy. 
+                   For a portfolio, simple rotation + camera movement is smoother/safer for mobile.
+                */
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            // Handle Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+
+        initThreeJS();
+
+    </script>
+</body>
+</html>
