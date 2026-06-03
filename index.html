@@ -17,17 +17,19 @@
 
 <style>
   :root {
-    --bg:        #0c0d10;
-    --bg-soft:   #131419;
-    --bg-card:   #16181f;
-    --line:      #24262f;
-    --line-soft: #1b1d24;
-    --ink:       #f4f1ea;
-    --ink-mid:   #a7a59c;
-    --ink-dim:   #6f6d66;
-    --accent:    #2e9bff;
-    --accent-2:  #0284c7;
-    --accent-dim:#13405e;
+    --bg:        #ece7db;
+    --bg-soft:   #e3ddcd;
+    --bg-card:   #f6f2e9;
+    --line:      #d4cdba;
+    --line-soft: #ddd6c4;
+    --ink:       #23252b;
+    --ink-mid:   #5c5a52;
+    --ink-dim:   #8a877c;
+    --accent:    #0a6ea3;
+    --accent-2:  #075a85;
+    --accent-dim:#a9cfe2;
+    --shadow:    0 1px 2px rgba(35,37,43,0.05), 0 8px 24px rgba(35,37,43,0.07);
+    --shadow-lg: 0 2px 4px rgba(35,37,43,0.06), 0 18px 40px rgba(35,37,43,0.11);
     --serif: 'Fraunces', Georgia, serif;
     --sans:  'Inter Tight', system-ui, sans-serif;
     --mono:  'Spline Sans Mono', ui-monospace, monospace;
@@ -53,8 +55,8 @@
     content: "";
     position: fixed; inset: 0;
     background:
-      radial-gradient(1200px 600px at 78% -8%, rgba(46,155,255,0.10), transparent 60%),
-      radial-gradient(900px 500px at -10% 18%, rgba(2,132,199,0.07), transparent 55%);
+      radial-gradient(1200px 600px at 78% -8%, rgba(2,132,199,0.06), transparent 60%),
+      radial-gradient(900px 500px at -10% 18%, rgba(2,132,199,0.04), transparent 55%);
     pointer-events: none; z-index: 0;
   }
 
@@ -66,7 +68,7 @@
   nav {
     position: sticky; top: 0; z-index: 50;
     backdrop-filter: blur(10px);
-    background: rgba(12,13,16,0.72);
+    background: rgba(236,231,219,0.80);
     border-bottom: 1px solid var(--line-soft);
   }
   nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
@@ -122,8 +124,8 @@
     transition: transform .15s, background .2s, border-color .2s; border: 1px solid var(--line);
   }
   .btn:active { transform: scale(0.98); }
-  .btn-primary { background: var(--accent); color: #04121f; border-color: var(--accent); font-weight: 600; }
-  .btn-primary:hover { background: #4fadff; }
+  .btn-primary { background: var(--accent); color: #ffffff; border-color: var(--accent); font-weight: 600; }
+  .btn-primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
   .btn-ghost { background: transparent; color: var(--ink); }
   .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -157,9 +159,9 @@
   .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
   .skill-card {
     background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; padding: 22px 22px 24px;
-    transition: border-color .25s, transform .25s;
+    transition: border-color .25s, transform .25s, box-shadow .25s;
   }
-  .skill-card:hover { border-color: var(--accent-dim); transform: translateY(-3px); }
+  .skill-card:hover { border-color: var(--accent-dim); transform: translateY(-3px); box-shadow: var(--shadow); }
   .skill-card h3 { font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; font-weight: 600; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip {
@@ -173,14 +175,14 @@
   .proj {
     background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px;
     padding: 28px 26px 26px; display: flex; flex-direction: column;
-    transition: border-color .25s, transform .25s; position: relative; overflow: hidden;
+    transition: border-color .25s, transform .25s, box-shadow .25s; position: relative; overflow: hidden;
   }
   .proj::after {
     content:""; position:absolute; inset:0 0 auto 0; height:2px;
     background: linear-gradient(90deg, var(--accent), transparent);
     opacity:0; transition:opacity .3s;
   }
-  .proj:hover { border-color: var(--accent-dim); transform: translateY(-4px); }
+  .proj:hover { border-color: var(--accent-dim); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
   .proj:hover::after { opacity: 1; }
   .proj .tag { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-dim); }
   .proj h3 {
@@ -192,10 +194,17 @@
   .proj p { color: var(--ink-mid); font-size: 1rem; line-height: 1.62; margin: 8px 0 18px; flex: 1; }
   .stack { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
   .stack span { font-family: var(--mono); font-size: 11.5px; color: var(--accent); border: 1px solid var(--accent-dim); padding: 3px 8px; border-radius: 5px; }
-  .proj-links { display: flex; gap: 18px; font-family: var(--mono); font-size: 13px; }
+  .proj-links { display: flex; gap: 18px; font-family: var(--mono); font-size: 13px; align-items: center; }
   .proj-links a { color: var(--ink-mid); display: inline-flex; align-items: center; gap: 6px; transition: color .2s; }
   .proj-links a:hover { color: var(--accent); }
+  .proj-links a.demo { color: var(--accent); font-weight: 500; }
+  .proj-links a.demo::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; box-shadow: 0 0 0 3px var(--accent-dim); }
   .proj-links svg { width: 15px; height: 15px; }
+  .group-label { display: flex; align-items: center; gap: 14px; margin: 8px 0 22px; }
+  .group-label:not(:first-of-type) { margin-top: 52px; }
+  .group-label h3 { font-family: var(--mono); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 600; white-space: nowrap; }
+  .group-label .rule { height: 1px; background: var(--line); flex: 1; }
+  .group-label .count { font-family: var(--mono); font-size: 12px; color: var(--ink-dim); }
 
   /* ---------- experience ---------- */
   .xp { display: flex; flex-direction: column; gap: 0; }
@@ -320,83 +329,105 @@
 <section id="work">
   <div class="wrap">
     <div class="sec-head"><span class="sec-num">03</span><span class="sec-title">Selected work</span></div>
+    <p style="color:var(--ink-mid);max-width:640px;margin:-26px 0 8px;font-size:1.05rem;">Seven projects across the data lifecycle — engineering pipelines, analytics, and applied ML. Live apps are marked; everything is open source.</p>
+
+    <div class="group-label">
+      <h3>Data engineering</h3><span class="rule"></span><span class="count">02</span>
+    </div>
     <div class="proj-grid">
 
       <article class="proj">
-        <span class="tag">Data Engineering</span>
+        <span class="tag">Lakehouse · Medallion</span>
         <h3><a href="https://github.com/chitranshpatel/PySpark-DBT-End-to-End-Data-Engineering-Project" target="_blank" rel="noopener">Modern Data Platform — PySpark + dbt</a></h3>
-        <p>End-to-end lakehouse moving data through Bronze, Silver and Gold layers. PySpark handles distributed processing while dbt manages transformations, tests and lineage across a clean Medallion architecture.</p>
-        <div class="stack"><span>PySpark</span><span>dbt</span><span>Medallion</span></div>
+        <p>End-to-end Medallion pipeline (Bronze → Silver → Gold) on Databricks: Spark Structured Streaming for incremental ingestion, modular class-based PySpark for Silver transforms, and a dbt star schema with SCD Type-2 dimensions, snapshots and Jinja/YAML macros.</p>
+        <div class="stack"><span>PySpark</span><span>dbt</span><span>Databricks</span><span>Star schema</span></div>
         <div class="proj-links">
-          <a href="https://github.com/chitranshpatel/PySpark-DBT-End-to-End-Data-Engineering-Project" target="_blank" rel="noopener">
-            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-            Code
-          </a>
+          <a href="https://github.com/chitranshpatel/PySpark-DBT-End-to-End-Data-Engineering-Project" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Code</a>
         </div>
       </article>
 
       <article class="proj">
-        <span class="tag">Data Engineering · Cloud</span>
-        <h3><a href="https://github.com/chitranshpatel/azure-spotify-data-engineering-project" target="_blank" rel="noopener">Azure Spotify Pipeline</a></h3>
-        <p>Production-grade automated pipeline ingesting Spotify API data via Azure Data Factory into Data Lake Gen2, with Auto Loader, Delta Lake and SCD Type-2 modelling — promoted dev → prod through Databricks Asset Bundles and GitHub Actions.</p>
-        <div class="stack"><span>Azure ADF</span><span>Databricks</span><span>Delta Lake</span><span>CI/CD</span></div>
+        <span class="tag">Azure · CI/CD</span>
+        <h3><a href="https://github.com/chitranshpatel/azure-spotify-data-engineering-project" target="_blank" rel="noopener">Spotify Pipeline — Azure + Databricks</a></h3>
+        <p>Metadata-driven, parameterised pipeline from Azure SQL into ADLS Gen2 via Data Factory with change-data-capture. Gold star schema built with Delta Live Tables, then automated dev → prod promotion through Databricks Asset Bundles and GitHub CI/CD.</p>
+        <div class="stack"><span>Azure ADF</span><span>Delta Live Tables</span><span>Asset Bundles</span><span>CDC</span></div>
         <div class="proj-links">
-          <a href="https://github.com/chitranshpatel/azure-spotify-data-engineering-project" target="_blank" rel="noopener">
-            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-            Code
-          </a>
+          <a href="https://github.com/chitranshpatel/azure-spotify-data-engineering-project" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Code</a>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="group-label">
+      <h3>Analytics &amp; BI</h3><span class="rule"></span><span class="count">03</span>
+    </div>
+    <div class="proj-grid">
+
+      <article class="proj">
+        <span class="tag">Streamlit · Live app</span>
+        <h3><a href="https://nsw-fuel-pricing.streamlit.app" target="_blank" rel="noopener">NSW Fuel Pricing Intelligence</a></h3>
+        <p>Streamlit dashboard on public NSW FuelCheck data (CKAN API) with a file-based DuckDB warehouse. Tracks 28-day rolling price cycles, flags biggest movers and brand outliers, analyses day-of-week patterns, and maps suburb-level prices — normalising 50+ raw brand strings to ~20 canonical brands.</p>
+        <div class="stack"><span>Python</span><span>DuckDB</span><span>Plotly</span><span>Streamlit</span></div>
+        <div class="proj-links">
+          <a class="demo" href="https://nsw-fuel-pricing.streamlit.app" target="_blank" rel="noopener">Live demo</a>
+          <a href="https://github.com/chitranshpatel/fuel-pricing-intel" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Code</a>
         </div>
       </article>
 
       <article class="proj">
-        <span class="tag">GenAI · Analytics</span>
-        <h3><a href="https://github.com/chitranshpatel/retail-sql-assistant" target="_blank" rel="noopener">Retail Insights Assistant</a></h3>
-        <p>A Streamlit text-to-SQL tool that converts plain-English questions into safe, SELECT-only SQL using multi-model LLM routing and ERD-aware prompting — instant charts and KPIs for non-technical retail managers, with read-only Postgres execution.</p>
-        <div class="stack"><span>Python</span><span>LLM routing</span><span>Streamlit</span><span>Postgres</span></div>
+        <span class="tag">Streamlit · Live app</span>
+        <h3><a href="https://retail-shrink-analytics.streamlit.app" target="_blank" rel="noopener">Retail Shrink Analytics</a></h3>
+        <p>A decision tool for store managers that triages departments worst-first by interim gross-profit decline, then drills into best lines, loss makers and fresh dump. A validated dollar model converts loss percentages into reliable dollars off a shared sales denominator, with red/amber/green status throughout.</p>
+        <div class="stack"><span>Python</span><span>Streamlit</span><span>Data modelling</span><span>Retail BI</span></div>
         <div class="proj-links">
-          <a href="https://github.com/chitranshpatel/retail-sql-assistant" target="_blank" rel="noopener">
-            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-            Code
-          </a>
+          <a class="demo" href="https://retail-shrink-analytics.streamlit.app" target="_blank" rel="noopener">Live demo</a>
+          <a href="https://github.com/chitranshpatel/retail-shrink-analytics" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Code</a>
         </div>
       </article>
 
       <article class="proj">
-        <span class="tag">Analytics · NLP</span>
+        <span class="tag">Snowflake · NLP</span>
         <h3><a href="https://github.com/chitranshpatel/yelp-reviews-end-to-end-analysis" target="_blank" rel="noopener">Yelp Reviews — End-to-End Analysis</a></h3>
-        <p>Cloud analytics workflow in Snowflake processing 5GB of unstructured Yelp data. Custom Python UDFs (TextBlob) enrich reviews with sentiment scores, then complex SQL surfaces trends by correlating review volume, ratings and geographic sentiment.</p>
-        <div class="stack"><span>Snowflake</span><span>Python UDFs</span><span>SQL</span><span>NLP</span></div>
+        <p>Processed a 5GB Yelp JSON dataset in ten parallel files through Amazon S3 external stages into Snowflake. Extracted structured tables from semi-structured VARIANT columns, enriched reviews with a Snowflake Python UDF (TextBlob) for sentiment, then ran ten SQL analyses across volume, ratings and geography.</p>
+        <div class="stack"><span>Snowflake</span><span>Python UDFs</span><span>SQL</span><span>Sentiment</span></div>
         <div class="proj-links">
-          <a href="https://github.com/chitranshpatel/yelp-reviews-end-to-end-analysis" target="_blank" rel="noopener">
-            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-            Code
-          </a>
+          <a href="https://github.com/chitranshpatel/yelp-reviews-end-to-end-analysis" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Code</a>
         </div>
       </article>
 
       <article class="proj">
-        <span class="tag">Business Intelligence</span>
+        <span class="tag">Tableau · Dashboard</span>
         <h3><a href="https://github.com/chitranshpatel/tableau-sales-customer-dashboard" target="_blank" rel="noopener">Sales &amp; Customer Dashboard</a></h3>
-        <p>A Tableau dashboard analysing sales performance and customer behaviour to support strategic planning — turning transactional data into a clear, decision-ready view of trends and segments.</p>
-        <div class="stack"><span>Tableau</span><span>BI</span><span>Data viz</span></div>
+        <p>Interactive Tableau dashboard covering sales trends, customer behaviour (new vs returning, purchase frequency), product performance and regional breakdowns, with clear KPI scorecards. Source data cleaned and prepared — dates standardised, types fixed, duplicates removed, calculated fields built — for reliable drill-down.</p>
+        <div class="stack"><span>Tableau</span><span>KPI design</span><span>Data prep</span></div>
         <div class="proj-links">
-          <a href="https://github.com/chitranshpatel/tableau-sales-customer-dashboard" target="_blank" rel="noopener">
-            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-            Code
-          </a>
+          <a href="https://github.com/chitranshpatel/tableau-sales-customer-dashboard" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Code</a>
         </div>
       </article>
 
+    </div>
+
+    <div class="group-label">
+      <h3>Applied ML &amp; GenAI</h3><span class="rule"></span><span class="count">01</span>
+    </div>
+    <div class="proj-grid">
+
       <article class="proj">
-        <span class="tag">More on GitHub</span>
-        <h3><a href="https://github.com/chitranshpatel" target="_blank" rel="noopener">Explore the full repository →</a></h3>
-        <p>Pipelines, analytics experiments and tooling — including ongoing work and the source behind everything here. The README has the full technical breakdown.</p>
-        <div class="stack"><span>10+ repos</span><span>Open source</span></div>
+        <span class="tag">LLM · Text-to-SQL</span>
+        <h3><a href="https://github.com/chitranshpatel/retail-sql-assistant" target="_blank" rel="noopener">Retail Insights Assistant</a></h3>
+        <p>A Streamlit assistant that turns plain-English retail questions into safe, SELECT-only Postgres SQL using ERD-aware prompting and few-shot examples. Routes each prompt across multiple OpenRouter LLMs in parallel, picks the best query by grounding score, cost and latency, and enforces read-only sessions, allow-listed tables and automatic error repair.</p>
+        <div class="stack"><span>Python</span><span>Streamlit</span><span>OpenRouter</span><span>Postgres</span></div>
         <div class="proj-links">
-          <a href="https://github.com/chitranshpatel" target="_blank" rel="noopener">
-            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-            @chitranshpatel
-          </a>
+          <a href="https://github.com/chitranshpatel/retail-sql-assistant" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Code</a>
+        </div>
+      </article>
+
+      <article class="proj" style="justify-content:center;align-items:flex-start;">
+        <span class="tag">More on GitHub</span>
+        <h3><a href="https://github.com/chitranshpatel" target="_blank" rel="noopener">Explore the full profile →</a></h3>
+        <p>Source for everything here, plus ongoing experiments. The profile README has the full technical breakdown.</p>
+        <div class="proj-links">
+          <a href="https://github.com/chitranshpatel" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>@chitranshpatel</a>
         </div>
       </article>
 
