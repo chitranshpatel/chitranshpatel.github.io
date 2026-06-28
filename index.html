@@ -9,21 +9,40 @@
 <meta property="og:description" content="Data science graduate building pipelines, analytics and visualisations. Seven open-source projects." />
 <meta property="og:type" content="website" />
 <style>
-  :root {
+  :root, [data-theme="light"] {
     --paper:#ffffff; --paper-2:#f7f9fb; --ink:#1a1d23; --ink-mid:#565b66; --ink-dim:#9097a1;
     --line:#e6e9ee; --blue:#1463c4; --blue-deep:#0f4c98; --blue-soft:#e7f0fb;
     --orange:#e8732a; --orange-soft:#fdecdf;
+    --topbar-bg:rgba(255,255,255,.86);
+    --shadow: 0 1px 2px rgba(20,30,50,.04), 0 4px 16px rgba(20,30,50,.05);
+  }
+  [data-theme="dark"] {
+    --paper:#0f1318; --paper-2:#171c23; --ink:#e8ebf0; --ink-mid:#9aa3b0; --ink-dim:#6b7280;
+    --line:#262c35; --blue:#5ea0ef; --blue-deep:#7db4f5; --blue-soft:#16273d;
+    --orange:#f0894a; --orange-soft:#33220f;
+    --topbar-bg:rgba(15,19,24,.82);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 22px rgba(0,0,0,.4);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#0f1318; --paper-2:#171c23; --ink:#e8ebf0; --ink-mid:#9aa3b0; --ink-dim:#6b7280;
+      --line:#262c35; --blue:#5ea0ef; --blue-deep:#7db4f5; --blue-soft:#16273d;
+      --orange:#f0894a; --orange-soft:#33220f;
+      --topbar-bg:rgba(15,19,24,.82);
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 22px rgba(0,0,0,.4);
+    }
+  }
+  :root {
     --mono: ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
     --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    --shadow: 0 1px 2px rgba(20,30,50,.04), 0 4px 16px rgba(20,30,50,.05);
   }
   * { box-sizing:border-box; margin:0; padding:0; }
   html { scroll-behavior:smooth; }
-  body { font-family:var(--sans); background:var(--paper); color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased; transition:background .25s ease, color .25s ease; }
   .wrap { max-width:880px; margin:0 auto; padding:0 24px; }
   a { color:inherit; text-decoration:none; }
 
-  .topbar { position:sticky; top:0; z-index:50; background:rgba(255,255,255,.86); backdrop-filter:saturate(160%) blur(10px); border-bottom:1px solid var(--line); }
+  .topbar { position:sticky; top:0; z-index:50; background:var(--topbar-bg); backdrop-filter:saturate(160%) blur(10px); border-bottom:1px solid var(--line); }
   .topbar .wrap { display:flex; align-items:center; justify-content:space-between; height:60px; }
   .brand { font-weight:700; font-size:15px; letter-spacing:-.01em; }
   .brand .dot { color:var(--orange); }
@@ -31,6 +50,18 @@
   .iconbtn { display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:500; color:var(--ink-mid); padding:7px 13px; border:1px solid var(--line); border-radius:8px; background:var(--paper); transition:all .18s ease; }
   .iconbtn svg { width:15px; height:15px; }
   .iconbtn:hover { color:var(--blue); border-color:var(--blue); background:var(--blue-soft); }
+  .theme-toggle { display:inline-grid; place-items:center; width:36px; height:36px; padding:0; border:1px solid var(--line); border-radius:8px; background:var(--paper); color:var(--ink-mid); cursor:pointer; transition:all .18s ease; }
+  .theme-toggle:hover { color:var(--blue); border-color:var(--blue); background:var(--blue-soft); }
+  .theme-toggle svg { width:17px; height:17px; }
+  .theme-toggle .moon { display:none; }
+  [data-theme="dark"] .theme-toggle .sun { display:none; }
+  [data-theme="dark"] .theme-toggle .moon { display:block; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-toggle .sun { display:none; }
+    :root:not([data-theme="light"]) .theme-toggle .moon { display:block; }
+    [data-theme="light"] .theme-toggle .sun { display:block; }
+    [data-theme="light"] .theme-toggle .moon { display:none; }
+  }
   @media (max-width:560px){ .iconbtn .lbl { display:none; } .iconbtn { padding:8px; } }
 
   .hero { padding:84px 0 64px; }
@@ -114,6 +145,10 @@
   <div class="wrap">
     <a href="#top" class="brand">Chitransh Patel<span class="dot">.</span></a>
     <nav class="top-links">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <a class="iconbtn" href="https://github.com/chitranshpatel" target="_blank" rel="noopener" aria-label="GitHub">
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         <span class="lbl">GitHub</span>
@@ -335,5 +370,22 @@
   </div>
 </footer>
 
+<script>
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    function currentIsDark() {
+      var set = root.getAttribute('data-theme');
+      if (set === 'dark') return true;
+      if (set === 'light') return false;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    btn.addEventListener('click', function () {
+      root.setAttribute('data-theme', currentIsDark() ? 'light' : 'dark');
+      // Note: on a normal site you'd persist with localStorage here.
+      // It's intentionally omitted because this preview environment blocks storage.
+    });
+  })();
+</script>
 </body>
 </html>
