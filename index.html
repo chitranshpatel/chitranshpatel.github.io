@@ -67,27 +67,41 @@
   .hero { padding:84px 0 64px; }
   .hi { font-family:var(--mono); font-size:14px; letter-spacing:.04em; color:var(--blue); margin-bottom:14px; font-weight:500; }
   .hi::before { content:""; display:inline-block; width:28px; height:1px; background:var(--blue); vertical-align:middle; margin-right:12px; }
-  h1 { font-size:clamp(2.6rem,7vw,4.2rem); font-weight:800; letter-spacing:-.03em; line-height:1.02; margin-bottom:26px; }
+
+  /* ── CHANGE 1: h1 gradient text ── */
+  h1 {
+    font-size:clamp(2.6rem,7vw,4.2rem); font-weight:800; letter-spacing:-.03em; line-height:1.02; margin-bottom:26px;
+    background: linear-gradient(135deg, var(--ink) 15%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
   .lede { font-size:clamp(1.05rem,2.4vw,1.28rem); color:var(--ink-mid); max-width:640px; line-height:1.62; }
-  .lede strong { color:var(--ink); font-weight:600; }
+  /* ── CHANGE 2: lede strong gets blue instead of plain ink ── */
+  .lede strong { color:var(--blue); font-weight:600; }
 
   section { padding:30px 0; }
   .sec-head { display:flex; align-items:baseline; gap:14px; margin-bottom:26px; }
   .sec-head h2 { font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink); white-space:nowrap; }
-  .sec-head .rule { flex:1; height:1px; background:var(--line); }
+  /* ── CHANGE 3: section rule is now a gradient ── */
+  .sec-head .rule { flex:1; height:1px; background: linear-gradient(to right, var(--blue), transparent); opacity:.4; }
 
   .skills-grid { display:grid; gap:18px; }
   .skill-row { display:grid; grid-template-columns:150px 1fr; gap:18px; align-items:start; }
   @media (max-width:560px){ .skill-row { grid-template-columns:1fr; gap:8px; } }
   .skill-cat { font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-mid); padding-top:4px; }
   .chips { display:flex; flex-wrap:wrap; gap:8px; }
-  .chip { font-size:13.5px; font-weight:500; color:var(--ink); background:var(--paper-2); border:1px solid var(--line); padding:5px 11px; border-radius:7px; }
+  /* ── CHANGE 4: chips flip to blue-soft bg + blue text ── */
+  .chip { font-size:13.5px; font-weight:500; color:var(--blue); background:var(--blue-soft); border:1px solid var(--blue-soft); padding:5px 11px; border-radius:7px; }
 
-  .group-title { display:flex; align-items:center; gap:10px; font-size:15px; font-weight:700; color:var(--ink); margin:30px 0 10px; }
+  /* ── CHANGE 5: group titles get blue colour ── */
+  .group-title { display:flex; align-items:center; gap:10px; font-size:15px; font-weight:700; color:var(--blue); margin:30px 0 10px; }
   .group-title .badge { font-family:var(--mono); font-size:11px; font-weight:600; color:var(--blue); background:var(--blue-soft); padding:2px 8px; border-radius:20px; }
   .group-title:first-of-type { margin-top:4px; }
 
-  .proj { border:1px solid var(--line); border-radius:12px; background:var(--paper); margin-bottom:12px; overflow:hidden; transition:border-color .18s ease, box-shadow .18s ease; }
+  /* ── CHANGE 6: project cards get a subtle default shadow ── */
+  .proj { border:1px solid var(--line); border-radius:12px; background:var(--paper); margin-bottom:12px; overflow:hidden; transition:border-color .18s ease, box-shadow .18s ease; box-shadow:0 1px 4px rgba(20,30,50,.06); }
   .proj[open] { border-color:var(--blue); box-shadow:var(--shadow); }
   .proj > summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:15px; padding:18px 20px; user-select:none; }
   .proj > summary::-webkit-details-marker { display:none; }
@@ -95,7 +109,9 @@
   .proj[open] .proj-ico { background:var(--orange-soft); border-color:var(--orange); color:var(--orange); }
   .proj-ico svg { width:21px; height:21px; }
   .proj-head { flex:1; min-width:0; }
-  .proj-name { display:block; font-size:1.04rem; font-weight:650; letter-spacing:-.01em; }
+  /* ── CHANGE 7: project name picks up blue on hover ── */
+  .proj-name { display:block; font-size:1.04rem; font-weight:650; letter-spacing:-.01em; transition:color .18s ease; }
+  .proj > summary:hover .proj-name { color:var(--blue); }
   .proj-sub { display:block; }
   .proj-sub { font-family:var(--mono); font-size:11.5px; color:var(--ink-dim); letter-spacing:.02em; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .live-dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--orange); margin-right:5px; vertical-align:middle; box-shadow:0 0 0 3px var(--orange-soft); }
@@ -117,7 +133,8 @@
   .proj-links a.demo:hover { color:#c95e1c; }
   .proj-links svg { width:14px; height:14px; }
 
-  .edu { display:flex; gap:16px; align-items:flex-start; border:1px solid var(--line); border-radius:12px; padding:20px 22px; background:var(--paper-2); }
+  /* ── CHANGE 8: edu/experience cards get a left accent border ── */
+  .edu { display:flex; gap:16px; align-items:flex-start; border:1px solid var(--line); border-left:3px solid var(--blue); border-radius:12px; padding:20px 22px; background:var(--paper-2); }
   .edu-ico { flex-shrink:0; width:42px; height:42px; border-radius:9px; background:var(--paper); border:1px solid var(--line); display:grid; place-items:center; color:var(--blue); }
   .edu-ico svg { width:22px; height:22px; }
   .edu-deg { font-weight:650; font-size:1.04rem; }
@@ -128,7 +145,15 @@
   .xp-bullets li::before { content:""; position:absolute; left:2px; top:9px; width:5px; height:5px; border-radius:50%; background:var(--blue); }
 
   footer { padding:56px 0 48px; border-top:1px solid var(--line); margin-top:40px; }
-  .foot-cta { font-size:1.15rem; font-weight:650; margin-bottom:20px; letter-spacing:-.01em; }
+  /* ── CHANGE 9: "Let's talk." gets gradient text + slight size bump ── */
+  .foot-cta {
+    font-size:1.55rem; font-weight:650; margin-bottom:20px; letter-spacing:-.01em;
+    background: linear-gradient(135deg, var(--ink) 15%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+  }
   .foot-links { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:30px; }
   .foot-links .iconbtn .lbl { display:inline; }
   .foot-meta { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; font-size:12.5px; color:var(--ink-dim); font-family:var(--mono); }
@@ -382,8 +407,6 @@
     }
     btn.addEventListener('click', function () {
       root.setAttribute('data-theme', currentIsDark() ? 'light' : 'dark');
-      // Note: on a normal site you'd persist with localStorage here.
-      // It's intentionally omitted because this preview environment blocks storage.
     });
   })();
 </script>
